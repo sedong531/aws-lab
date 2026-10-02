@@ -105,6 +105,32 @@ AWS 내에 웹 서비스 인프라를 구성하고, 내부 자원 보호, 접근
 
 # 5. 검증 결과
 
+테스트별 시나리오
+외부 웹 서비스 접근 및 부하분산 검증
+- Host PC 브라우저 → ALB → EC2 HTTP 접속
+- 반복 요청으로 두 EC2에 요청이 분산되는지 확인
+- 여기서 VPC / Public·Private Subnet / IGW / Route Table / SG / ALB / Target Group / EC2 전반을 한꺼번에 검증
+
+웹 서버 → 데이터베이스 연결 검증
+- Web EC2에서 Secrets Manager의 자격 증명을 조회
+- 해당 정보로 RDS 연결
+- 여기서 EC2 / RDS / RDS SG / IAM Role·Policy / Secrets Manager를 같이 검증
+
+웹 공격 차단 검증
+- 외부에서 SQL Injection 같은 요청 전송
+- 정상 요청은 통과하고 공격 요청은 WAF에서 차단되는지 확인
+- WAF / Web ACL / Managed Rules 검증
+- WAF 로그를 따로 활성화해뒀다면 해당 로그까지 확인 가능
+
+로그 및 감사 기록 검증
+- VPC Flow Logs가 CloudWatch Logs에 들어오는지 확인
+- CloudWatch에서 EC2/ALB 등의 메트릭 확인
+- AWS 콘솔에서 실제 설정 변경 같은 작업을 하나 수행한 뒤 CloudTrail에서 해당 작업 기록 확인
+- CloudTrail 로그가 S3에 저장되는지 확인
+
+Auto Scaling 동작 검증
+CPU 부하 발생 → Scale-out → 신규 EC2가 Target Group에 등록 → 부하 감소 후 Scale-in
+
 
 # 6. 상세 문서
 

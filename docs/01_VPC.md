@@ -51,16 +51,6 @@
 
 - 수집된 Flow Logs는 CloudWatch Logs로 전송하여 네트워크 통신 내역을 확인할 수 있도록 구성하였다.
 
-## 8. 구성 결과
-
-<img src="../images/1_VPC/1.png" alt="" width="700">
-- 700
-
-<img src="../images/1_VPC/1.png" alt="" width="800">
-- 800
+## 8. 대표 화면
 
 <img src="../images/1_VPC/1.png" alt="" width="900">
-- 900
-
-<img src="../images/1_VPC/1.png" alt="" width="1000">
-- 1000
