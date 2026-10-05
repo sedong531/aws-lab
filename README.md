@@ -67,7 +67,7 @@ AWS 내에 웹 서비스 인프라를 구성하고, 내부 자원 보호, 접근
 
 > 데이터베이스는 외부 노출과 불필요한 접근을 최소화하고, 필요한 웹 서버에서만 안전하게 접근할 수 있도록 구성하였다.
 
-- RDS를 이용하여 웹 서비스용 데이터베이스를 구성하고, DB Subnet Group을 통해 Private Subnet에 배치하였다.
+- RDS를 이용하여 웹 서비스용 데이터베이스를 구성하고, Publicly Accessible 옵션을 비활성화하여 외부에서 직접 접근할 수 없도록 구성하였다.
 
 - RDS Security Group은 Web Security Group에서 전달되는 TCP 3306 연결만 허용하도록 구성하였다.
 
