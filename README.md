@@ -104,6 +104,9 @@ AWS 내에 웹 서비스 인프라를 구성하고, 내부 자원 보호, 접근
 
 
 # 5. 검증 결과
+```
+작성중. 검증해야 함.
+```
 
 테스트별 시나리오
 외부 웹 서비스 접근 및 부하분산 검증
@@ -134,3 +137,12 @@ CPU 부하 발생 → Scale-out → 신규 EC2가 Target Group에 등록 → 부
 
 # 6. 상세 문서
 
+프로젝트에서 사용된 리소스별 세부 구성 내용은 아래 문서에서 확인할 수 있다.
+
+- [01. VPC](./docs/01_VPC.md)
+- [02. EC2](./docs/02_EC2.md)
+- [03. RDS](./docs/03_RDS.md)
+- [04. IAM 및 Secrets Manager](./docs/04_IAM_SecretsManager.md)
+- [05. WAF](./docs/05_WAF.md)
+- [06. CloudWatch](./docs/06_CloudWatch.md)
+- [07. CloudTrail 및 S3](./docs/07_CloudTrail_S3.md)

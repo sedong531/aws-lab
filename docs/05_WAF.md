@@ -1,32 +1,37 @@
-VPC
-= "사설 네트워크" -> "내가 사용할 모든 네트워크를 할당 받은것"
+# 05 WAF
 
-Subnet
-= "실제 내가 사용할 네트워크" -> "VPC로부터 분할해서 사용함"
-    public : 외부 인터넷과 연결이 가능한 서브넷으로 사용 (예컨데 web)
-    private : 외부 인터넷 연결이 불가능한 서브넷으로 사용 (예컨데 db)
+## 1. WAF 구성
 
-Route Table
-= "서버들 관리하는 주소록같은 것"
-    public : public subnet에서 사용할 목적으로 만든 public rt
-            : IG + local
-    private : private subnet에서 사용할 목적으로 만든 private rt
-            : local
+- 외부에서 들어오는 웹 요청에 대해 애플리케이션 계층의 보안 통제를 적용하기 위해 AWS WAF를 구성하였다.
 
-Internet Gateway(IG)
-= "인터넷으로 향하는 통로 역할의 게이트웨이"
-    public에 여길 등록해놔야 인터넷으로 갈 수 있음. 사실상 public인 이유.
+- Web ACL을 생성하여 웹 요청을 검사하고, 정의된 Rule에 따라 요청을 허용하거나 차단하도록 구성하였다.
 
 
-Security Group
-= "인터페이스에 부여하는 일종의 보안 정책들"
-= HTTP, HTTPS, SSH만 인바운드 트래픽 허용시키는게 Web서버. 아웃바운드는 다 차단.
-= Stateful
+## 2. Web ACL 및 Managed Rule
 
-EC2
-= 인스턴스 객채.
-= HTTP, HTTPS 다운했음.
-= 호스트에서 웹브라우저로 SSH, HTTP, HTTPS 접속 성공
+- Web ACL에 AWS Managed Rule Group을 적용하여 일반적인 웹 공격과 SQL Injection 패턴을 탐지·차단하도록 구성하였다.
+
+- 적용한 Managed Rule Group은 다음과 같다.
+
+| Rule Group | 역할 |
+| --- | --- |
+| AWSManagedRulesCommonRuleSet | 일반적인 웹 공격 패턴 탐지 및 차단 |
+| AWSManagedRulesSQLiRuleSet | SQL Injection 공격 패턴 탐지 및 차단 |
+
+
+## 3. ALB 연동
+
+- WAF Web ACL을 Application Load Balancer(ALB)에 연결하여 외부 HTTP 요청이 웹 서버에 전달되기 전에 WAF Rule을 적용받도록 구성하였다.
+
+- 정상 요청은 ALB를 통해 Target Group으로 전달되고, Rule에 의해 탐지된 요청은 WAF에서 차단하도록 구성하였다.
+
+
+## 4. 대표 화면
+
+### Web ACL
+<src img="../images/5_WAF/web_acl.png" alt="" width="900">
 
 
 
+### Web ACL에 적용된 Rules
+<src img="../images/5_WAF/web_acl_rule.png" alt="" width="900">

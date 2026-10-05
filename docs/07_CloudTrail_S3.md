@@ -1,133 +1,30 @@
-# 1. 로그/감사 계열 : Cloud Trail / VPC Flow Logs / Access Log(미구현)
+# 07 CloudTrail 및 S3
+
+## 1. CloudTrail 구성
+
+- AWS 계정에서 발생하는 주요 관리 작업과 API 호출 이력을 기록하기 위해 CloudTrail을 구성하였다.
+
+- Trail을 생성하여 리소스 생성, 수정, 삭제 등 AWS Management Event를 기록하도록 설정하였다.
 
 
+## 2. S3 로그 저장
 
-# 2. 탐지 계열 : GuardDuty
+- CloudTrail에서 수집한 감사 로그를 별도의 S3 Bucket에 저장하도록 구성하였다.
 
-
-
-# 3. 상태/취약점 점검 계열 : Inpector
-
+- 이를 통해 AWS 계정 활동 이력을 장기간 보관하고 필요한 경우 추적할 수 있도록 하였다.
 
 
+## 3. 감사 로그 확인
 
-# 4. 차단/예방 계열 : WAF / 방화벽 / IPS 등
+- CloudTrail Event history를 통해 AWS 리소스에 대한 관리 작업 기록을 확인할 수 있도록 구성하였다.
 
-
-
-
-VPC
-Subnet
-Internet Gateway
-Route Table
-Security Group
-
-EC2
-AMI
-Launch Template
-Auto Scaling Group
-Application Load Balancer
-Target Group
-
-RDS
-S3
-
-IAM
-CloudTrail
-CloudWatch
-VPC Flow Logs
-AWS WAF
-Secrets Manager
+- 기록된 CloudTrail 로그가 S3 Bucket에 저장되는 것을 확인할 수 있도록 구성하였다.
 
 
-GuardDuty 미구현
+## 4. 대표 화면
 
-SSM / Inspector / Macie / Security Hub / IDS,IPS대용이름머더라
+### 클라우드 트레일
+<img src="../images/7_CloudTrail_S3/cloudtrail.png" alt="" width="900">
 
-
-
----
-
-# 1. 인프라스트럭처.md
-EC2
-RDS
-S3
-Auto Scaling (Launch Template, AMI도 여기일듯. 타겟그룹도 여기인가)
--> 각 항목별 구축 내용 / 주요 설정 / 검증
-
-# 2. 네트워크.md
-VPC
-Public / Private Subnet
-Route Table
-IGW
-ALB 
--> 네트워크 흐름, 연결성 검증
-NAT 추가 했음 private -> NAT -> 인터넷
-
-# 3. 접근 제어.md
-Security Group
-IAM
-세큐리티 매니저
--> 접근 범위 / 권한 구조, 허용차단 검증
-
-# 4. 웹 보안.md
-HTTPS
-AWS WAF
--> 적용 정책, 정상 요청/차단 요청 검증
-
-# 5. 로깅 모니터링.md
-CloudTrail
-CloudWatch
-VPC Flow Logs
--> 로그 수집 위치, 실제 이벤트/로그 생성 확인
-
-
-
-
-웹서비스가 어떤 구조로 배치되었는가
-
-외부 요청이 어디를 거쳐 어디까지 가는가
-
-보안/로그 서비스가 주변에서 어떻게 붙는가
-
-
-
-
-
-메인경로
-
-Internet - WAF - ALB - EC2 - EC2 - RDS
-
-
-네트워크 구조
-VPC (영역은?)
-- Public Subnet a, b
-- Private Subnet a, b
-
-접근/보안
-Security Group
-IAM Role
-Secrets Manager
-
-로그/모니터링
-CloudWatch
-CloudTrail
-VPC Flow Logs
-S3
-
-
-
-
-
-
-s3, Secrets manager, CloudTrail, CloudWatch, VPC Flow Logs
--> 넣기.
-
-
-
-IAM, Security Group -> 상세문서로 빼기??
-
-
-1) CloudTrail -> S3
-
-2) S
+### S3
+<img src="../images/7_CloudTrail_S3/s3_logs.png" alt="" width="900">
