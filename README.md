@@ -1,18 +1,13 @@
 # 1. 프로젝트 개요
 
+이 프로젝트는 클라우드 환경에서 웹 서비스를 제공하기 위한 인프라를 구축하고, 네트워크 분리와 접근 제어, 웹 요청 보호, 자격 증명 관리, 로그 및 감사 기능을 함께 적용한 클라우드 보안 인프라 구축 프로젝트이다.
 
-이 프로젝트는 클라우드 환경에서 웹 서비스 운영에 필요한 기본 인프라와 보안 통제를 직접 구현하는 프로젝트이다.
-
-AWS 내에 웹 서비스 인프라를 구성하고, 내부 자원 보호, 접근 권한 및 자격 증명 관리, 모니터링과 로그 수집 등의 보안 기능을 적용하여 전체 서비스 구조 안에서 서로 연계하였다.
-
+AWS를 대상으로 웹 서비스 운영에 필요한 인프라를 구성한 뒤, 각 네트워크 구간에서 발생할 수 있는 불필요한 노출과 접근을 줄이고, 운영 과정에서 필요한 보안 통제를 적용하는 방향으로 전체 구조를 설계하였다.
 
 # 2. 전체 아키텍처
 
-<img src="./images/test/6.png" alt="전체 아키텍처" width="700">
+<img src="./images/readme/architecture.png" alt="전체 아키텍처" width="700">
 
-```text
-설명 필요하면 적을수도 있음
-```
 
 
 # 3. 주요 AWS 서비스
@@ -22,16 +17,13 @@ AWS 내에 웹 서비스 인프라를 구성하고, 내부 자원 보호, 접근
 | VPC | Subnet, IGW, NAT Gateway, Route Table, VPC Flow Logs | 네트워크 분리 및 전체 통신 경로 구성 |
 | EC2 | Instance, AMI, Launch Template, ALB, Target Group, Auto Scaling | 가용성을 고려한 웹 서비스 제공 |
 | RDS | DB Instance, DB Subnet Group | 웹 서비스용 데이터베이스 제공 |
-| IAM | Role, Policy | AWS 리소스 간 접근 권한 제어 |
+| IAM | User, Role, Policy | 관리 계정 분리, AWS 리소스 간 접근 권한 제어 |
 | Secrets Manager | Secret | DB 자격 증명 등 민감정보 관리 |
 | WAF | Web ACL, Managed Rule | 웹 요청 필터링 |
 | CloudWatch | Metrics, Logs, Alarm | 리소스 및 로그 모니터링 |
 | CloudTrail | Trail | AWS 계정 활동 기록 |
 | S3 | Bucket | CloudTrail 감사 로그 보관 |
 
-```text
-설명 필요하면 적을수도 있음.
-```
 
 # 4. 핵심 구성
 
@@ -43,11 +35,9 @@ AWS 내에 웹 서비스 인프라를 구성하고, 내부 자원 보호, 접근
 
 - Public Subnet은 Public Route Table을 적용하여 Internet Gateway를 통해 외부 통신이 가능하도록 구성하고, ALB를 배치하여 외부 요청에 응답하도록 하였다.
 
-- Private Subnet에는 Private Route Table을 적용하여 외부에서의 직접 접근이 필요하지 않은 EC2와 RDS를 배치하고, 필요 시 NAT Gateway를 통해 SSM 등 외부 서비스와의 아웃바운드 통신이 가능하도록 구성하였다.
+- Private Subnet에는 Private Route Table을 적용하여 외부에서의 직접 접근이 필요하지 않은 EC2와 RDS를 배치하고, 필요 시 NAT Gateway를 통해 SSM 등 AWS 서비스 및 인터넷과의 아웃바운드 통신이 가능하도록 구성하였다.
 
-- Security Group(SG)을 ALB, Web EC2, RDS에 각각 적용하여 접근 범위를 분리하였다. 
-
-- ALB SG는 외부 HTTP 요청을 허용하고, Web SG는 ALB에서 전달되는 HTTP 요청만 허용하며, RDS SG는 Web EC2에서 전달되는 TCP 3306 연결만 허용하도록 구성하였다.
+- Security Group(SG)을 ALB, Web EC2, RDS에 각각 적용하고, Internet → ALB → Web EC2 → RDS 순서로 서비스 제공에 필요한 통신만 허용하도록 구성하였다.
 
 - VPC Flow Logs를 이용하여 네트워크 트래픽 정보를 수집하도록 구성하였다.
 
@@ -80,7 +70,7 @@ AWS 내에 웹 서비스 인프라를 구성하고, 내부 자원 보호, 접근
 
 - 관리용 IAM User를 별도로 생성하여 루트 계정의 상시 사용을 피하고, 생성 이후 해당 계정을 이용해 관리 작업을 수행하였다.  
 
-- IAM Role과 Policy를 생성하여 VPC Flow Logs의 로그 전달과 EC2의 AWS 서비스 접근에 필요한 권한을 부여하였다.  
+- IAM Role과 Policy를 생성하여 VPC Flow Logs의 로그 전달과 EC2의 AWS 서비스 접근에 필요한 권한을 각각 부여하였다.  
 
 - Secrets Manager에 RDS 접속에 필요한 자격 증명을 저장하고, EC2가 IAM Role 권한으로 해당 Secret을 조회하여 RDS 연결에 사용하도록 구성하였다.
 
@@ -90,7 +80,7 @@ AWS 내에 웹 서비스 인프라를 구성하고, 내부 자원 보호, 접근
 
 - WAF를 ALB에 연결하고 Web ACL을 적용하여 외부 웹 요청을 검사하도록 구성하였다.
 
-- AWS Managed Rules의 Common Rule Set과 SQL Injection Rule Set을 적용하여 일반적인 웹 공격 및 SQL Injection 요청을 필터링하도록 구성하였다.
+- AWS Managed Rules의 Common Rule Set과 SQL Injection Rule Set을 적용하여 일반적인 웹 공격 및 SQL Injection 패턴을 탐지·차단하도록 구성하였다.
 
 ## 06. 모니터링 및 감사
 
@@ -103,37 +93,11 @@ AWS 내에 웹 서비스 인프라를 구성하고, 내부 자원 보호, 접근
 - CloudWatch를 이용하여 주요 리소스의 상태와 메트릭을 확인하고, 수집된 로그를 통합적으로 모니터링할 수 있도록 구성하였다.
 
 
-# 5. 검증 결과
-```
-작성중. 검증해야 함.
-```
+# 5. 검증
 
-테스트별 시나리오
-외부 웹 서비스 접근 및 부하분산 검증
-- Host PC 브라우저 → ALB → EC2 HTTP 접속
-- 반복 요청으로 두 EC2에 요청이 분산되는지 확인
-- 여기서 VPC / Public·Private Subnet / IGW / Route Table / SG / ALB / Target Group / EC2 전반을 한꺼번에 검증
+구성한 인프라와 보안 기능이 의도한 대로 동작하는지 확인하기 위해 웹 서비스 접근 및 부하분산, RDS 연결, WAF 차단, 로그 및 감사 기록, Auto Scaling 동작을 검증하였다.
 
-웹 서버 → 데이터베이스 연결 검증
-- Web EC2에서 Secrets Manager의 자격 증명을 조회
-- 해당 정보로 RDS 연결
-- 여기서 EC2 / RDS / RDS SG / IAM Role·Policy / Secrets Manager를 같이 검증
-
-웹 공격 차단 검증
-- 외부에서 SQL Injection 같은 요청 전송
-- 정상 요청은 통과하고 공격 요청은 WAF에서 차단되는지 확인
-- WAF / Web ACL / Managed Rules 검증
-- WAF 로그를 따로 활성화해뒀다면 해당 로그까지 확인 가능
-
-로그 및 감사 기록 검증
-- VPC Flow Logs가 CloudWatch Logs에 들어오는지 확인
-- CloudWatch에서 EC2/ALB 등의 메트릭 확인
-- AWS 콘솔에서 실제 설정 변경 같은 작업을 하나 수행한 뒤 CloudTrail에서 해당 작업 기록 확인
-- CloudTrail 로그가 S3에 저장되는지 확인
-
-Auto Scaling 동작 검증
-CPU 부하 발생 → Scale-out → 신규 EC2가 Target Group에 등록 → 부하 감소 후 Scale-in
-
+상세한 검증 과정과 결과는 [08. 검증 결과](./docs/08_검증_결과.md)에서 확인할 수 있다.
 
 # 6. 상세 문서
 
@@ -146,3 +110,4 @@ CPU 부하 발생 → Scale-out → 신규 EC2가 Target Group에 등록 → 부
 - [05. WAF](./docs/05_WAF.md)
 - [06. CloudWatch](./docs/06_CloudWatch.md)
 - [07. CloudTrail 및 S3](./docs/07_CloudTrail_S3.md)
+- [08. 검증 결과](./docs/08_검증_결과.md)
