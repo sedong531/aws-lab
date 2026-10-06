@@ -53,4 +53,4 @@
 
 ## 8. 대표 화면
 
-<img src="../images/1_VPC/1.png" alt="" width="900">
+<img src="../images/1_VPC/resource_map.png" alt="" width="900">

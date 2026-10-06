@@ -32,5 +32,6 @@
 
 ## 5. 대표 화면
 
-<img src="../images/6_CloudWatch/dashboard.png" alt="2" width="900">
+### Dashboard 화면
+<img src="../images/6_CloudWatch/dashboard.png" alt="Dashboard 화면" width="900">
 

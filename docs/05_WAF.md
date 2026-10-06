@@ -29,9 +29,9 @@
 ## 4. 대표 화면
 
 ### Web ACL
-<src img="../images/5_WAF/web_acl.png" alt="" width="900">
+<img src="../images/5_WAF/web_acl.png" alt="Web ACL" width="900">
 
 
 
 ### Web ACL에 적용된 Rules
-<src img="../images/5_WAF/web_acl_rule.png" alt="" width="900">
+<img src="../images/5_WAF/web_acl_rule.png" alt="Web ACL Rules" width="900">

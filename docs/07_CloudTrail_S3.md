@@ -23,8 +23,8 @@
 
 ## 4. 대표 화면
 
-### 클라우드 트레일
-<img src="../images/7_CloudTrail_S3/cloudtrail.png" alt="" width="900">
+### CloudTrail
+<img src="../images/7_CloudTrail_S3/cloudtrail.png" alt="CloudTrail" width="900">
 
 ### S3
-<img src="../images/7_CloudTrail_S3/s3_logs.png" alt="" width="900">
+<img src="../images/7_CloudTrail_S3/s3_logs.png" alt="S3" width="900">

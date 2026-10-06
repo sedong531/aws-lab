@@ -33,4 +33,4 @@
 
 ### RDS Connectivity & Security
 
-<img src="../images/3_rds/rds.png" width="900">
+<img src="../images/3_RDS/rds.png" alt="RDS 상태" width="900">

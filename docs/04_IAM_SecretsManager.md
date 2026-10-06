@@ -42,11 +42,11 @@
 ## 6. 대표 화면
 
 ### EC2 IAM Role
-<img src="../images/4_IAM_SecretsManager/ec2_role.png" alt="" width="900">
+<img src="../images/4_IAM_SecretsManager/ec2_role.png" alt="EC2 IAM Role" width="900">
 
 
 ### VPC Flow Logs Role
-<img src="../images/4_IAM_SecretsManager/vpc_flow_logs_role.png" alt="" width="900">
+<img src="../images/4_IAM_SecretsManager/vpc_flow_logs_role.png" alt="VPC Flow Logs Role" width="900">
 
 
 
